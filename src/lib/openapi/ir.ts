@@ -27,6 +27,12 @@ export interface CanonicalComponent {
   refs: string[];      // inner $ref references
 }
 
+export interface CanonicalServer {
+  url: string;
+  description?: string;
+  variables?: Record<string, any>;
+}
+
 export interface CanonicalSpec {
   id: string;
   name: string;
@@ -37,6 +43,7 @@ export interface CanonicalSpec {
     version: string;
     description?: string;
   };
+  servers: CanonicalServer[];
   endpoints: CanonicalEndpoint[];
   schemas: Map<string, CanonicalComponent>;
   securitySchemes: Map<string, CanonicalComponent>;

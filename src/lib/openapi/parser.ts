@@ -1,5 +1,5 @@
 import yaml from 'js-yaml';
-import { CanonicalSpec, CanonicalEndpoint, CanonicalComponent, SpecFormat } from './ir';
+import { CanonicalSpec, CanonicalEndpoint, CanonicalComponent, CanonicalServer, SpecFormat } from './ir';
 
 /**
  * Recursively search an object for all "$ref" values.
@@ -69,6 +69,33 @@ export function parseSpec(id: string, name: string, content: string): CanonicalS
     version: parsed.info?.version || '1.0.0',
     description: parsed.info?.description
   };
+
+  // 2b. Extract servers
+  let servers: CanonicalServer[] = [];
+  if (detectedFormat === 'swagger2') {
+    // Swagger 2.0: reconstruct from host + basePath + schemes
+    if (parsed.host) {
+      const schemes = Array.isArray(parsed.schemes) && parsed.schemes.length > 0
+        ? parsed.schemes
+        : ['https'];
+      const basePath = parsed.basePath || '';
+      for (const scheme of schemes) {
+        servers.push({
+          url: `${scheme}://${parsed.host}${basePath}`,
+          description: `${name} server`,
+        });
+      }
+    }
+  } else {
+    // OpenAPI 3.x: servers array
+    if (Array.isArray(parsed.servers)) {
+      servers = parsed.servers.map((s: any) => ({
+        url: s.url || '',
+        description: s.description,
+        variables: s.variables,
+      }));
+    }
+  }
 
   // 3. Initialize Component Maps
   const schemas = new Map<string, CanonicalComponent>();
@@ -229,6 +256,7 @@ export function parseSpec(id: string, name: string, content: string): CanonicalS
     detectedFormat,
     originalVersion,
     info,
+    servers,
     endpoints,
     schemas,
     securitySchemes,
