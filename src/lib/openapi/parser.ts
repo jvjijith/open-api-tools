@@ -238,6 +238,7 @@ export function parseSpec(id: string, name: string, content: string): CanonicalS
         specName: name,
         path: pathKey,
         method: methodKey,
+        operationId: operation.operationId,
         summary: operation.summary || operation.operationId,
         description: operation.description,
         tags: Array.isArray(operation.tags) ? operation.tags : [],

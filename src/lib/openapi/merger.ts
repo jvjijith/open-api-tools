@@ -417,6 +417,7 @@ export function compileMergedSpecs(
     // Fallback to graph parameters if endpoint parsing requires deep cloning
     const baseOperationObj = originalOperation 
       ? {
+          operationId: originalOperation.operationId,
           summary: originalOperation.summary,
           description: originalOperation.description,
           tags: originalOperation.tags,

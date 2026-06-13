@@ -34,6 +34,7 @@ export function buildDependencyGraph(specs: CanonicalSpec[]): DependencyGraph {
         specName: ep.specName,
         path: ep.path,
         method: ep.method,
+        operationId: ep.operationId,
         summary: ep.summary,
         description: ep.description,
         tags: ep.tags,

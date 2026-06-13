@@ -8,6 +8,7 @@ export interface CanonicalEndpoint {
   specName: string;
   path: string;
   method: string;
+  operationId?: string;
   summary?: string;
   description?: string;
   tags: string[];

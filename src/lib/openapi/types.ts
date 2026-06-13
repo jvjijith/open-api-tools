@@ -12,6 +12,7 @@ export interface EndpointNode {
   specName: string;
   path: string;
   method: string;    // 'get', 'post', 'put', 'delete', 'patch', etc.
+  operationId?: string;
   summary?: string;
   description?: string;
   tags: string[];
